@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 from pathlib import Path
-import django_heroku
 import environ
 import dj_database_url
 from decouple import config
@@ -169,4 +168,4 @@ ACCOUNT_UNIQUE_EMAIL = True
 
 #DEFAULT_FROM_EMAIL = 'admin@planquick.com'
 
-django_heroku.settings(locals())
+

@@ -284,7 +284,7 @@ def ChartPageView(request):
 
 def StatPageView(request):
 
-    transactions = Transactions.objects.all().order_by('trn_type')
+    transactions = Transactions.objects.filter(owner=request.user.email).order_by('trn_type')
 
     context = {}
     context['transactions'] = transactions

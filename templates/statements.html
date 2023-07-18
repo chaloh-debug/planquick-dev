@@ -1,33 +1,43 @@
 {% extends 'dashboard.html' %}
-{% block title %}statements{% endblock title %}  
+{% load static %}
+{% block title %}statements{% endblock title %}
 {% block content %}
-<style type="text/css">
-  .tg  {border-collapse:collapse;border-spacing:0;}
-  .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-    overflow:hidden;padding:10px 5px;word-break:normal;}
-  .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
-    font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
-  .tg .tg-0lax{text-align:left;vertical-align:top}
-  </style>
-    <main class="card">
-      <table class='tg'>
-        <thread>
-          <tr>
-            <th>Trn_date</th>
-            <th>Trn_type</th>
-            <th>Trn_amount</th>
-          </tr>
-        </thread>
-        <tbody>
-    
-            {%for transaction in transactions %}
-            <tr>
-              <td class='tg=0lax'>{{transaction.trn_date}}</td>
-              <td class='tg=0lax'>{{transaction.trn_type}}</td>
-              <td class='tg=0lax'>{{transaction.amount}}</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-      </table>
-    </main >
+<head>
+  <link rel="stylesheet" href="{% static 'css/apexcharts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dashboard2.css' %}">
+  <link rel="stylesheet" href="{% static 'css/common.css' %}">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+  <style type="text/css">
+    .tg  {border-collapse:collapse;border-spacing:0;}
+    .tg td{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg th{border-color:black;border-style:solid;border-width:1px;font-family:Arial, sans-serif;font-size:14px;
+      font-weight:normal;overflow:hidden;padding:10px 5px;word-break:normal;}
+    .tg .tg-0lax{text-align:left;vertical-align:top}
+    </style>
+</head>
+<body>
+  <h1>Statements Page</h1>
+
+  <table class='tg'>
+    <thread>
+      <tr>
+        <th>Transaction date</th>
+        <th>Transaction type</th>
+        <th>Amount</th>
+      </tr>
+    </thread>
+    <tbody>
+
+        {%for transaction in transactions %}
+        <tr>
+          <td class='tg=0lax'>{{transaction.trn_date}}</td>
+          <td class='tg=0lax'>{{transaction.trn_type}}</td>
+          <td class='tg=0lax'>{{transaction.amount}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
 {% endblock content %}
+</body>

@@ -1,37 +1,42 @@
 {% extends 'dashboard.html' %}
 {% load static%}
+<html>
+  {% block content %}
+<head>
+  <link rel="stylesheet" href="{% static 'css/apexcharts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/charts.css' %}">
+  <link rel="stylesheet" href="{% static 'css/dashboard2.css' %}">
+  <link rel="stylesheet" href="{% static 'css/common.css' %}">
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
+</head>
 
-{% block content %}
-<link rel="stylesheet" href="{% static 'css/apexcharts.css' %}">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
 
-
+<body>
 <div class="card-columns">
     <div class="card bg-light">
       <div class="card-body text-center" id='chart1'>
-        <p class="card-text">Total Transactions</p>
+        <p class="card-text">Column: Category Totals </p>
       </div>
     </div>
     <div class="card bg-danger">
       <div class="card-body text-center" id='chart2'>
-        <p class="card-text">Total Transactions</p>
+        <p class="card-text">Line: Category Totals </p>
       </div>
     </div>
     <div class="card bg-light">
       <div class="card-body text-center" id='chart3'>
-        <p class="card-text">Total Transactions</p>
+        <p class="card-text">Donut: Category Totals</p>
       </div>
     </div>
     <div class="card bg-light">
       <div class="card-body text-center" id='chart4'>
-        <p class="card-text">Total Transactions</p>
+        <p class="card-text">Monthly Total Transactions</p>
       </div>
     </div>
 </div>
 
 <script src="{% static 'js/apexcharts.js' %}"></script>
-<script src="{% static 'js/apexcharts.min.js' %}"></script>
 
 
 <script>
@@ -117,7 +122,7 @@
       }],
         chart: {
         type: 'bar',
-        height: 250
+        height: 350
       },
       plotOptions: {
         bar: {
@@ -156,3 +161,5 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 {% endblock content %}
+</body>
+</html>

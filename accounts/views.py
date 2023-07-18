@@ -10,7 +10,7 @@ class SignupPageView(generic.CreateView):
 class ProfilePageView(generic.UpdateView):
     form_class = CustomUserChangeForm
     success_url = reverse_lazy('dashboard')
-    template_name = 'dashboard/profile.html'
+    template_name = 'profile.html'
 
     def get_object(self):
         return self.request.user

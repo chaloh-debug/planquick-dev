@@ -132,41 +132,8 @@ class AboutPageView(TemplateView):
 class ContactPageView(TemplateView):
      template_name = 'contacts.html'
 
-class ProfilePageView(TemplateView):
-      template_name = 'profile.html'
-
 def ChartPageView(request):
-    """
-    mydate  = []
-    transfers = []
-    received = []
-    merchant = []
-    withdrawal = []
-    bundle = []
-    deposit = []
-    paybill = []
-
-    tsf = Transactions.objects.filter(owner=request.user.email, trn_type='Customer Transfer')
-    rcv = Transactions.objects.filter(owner=request.user.email, trn_type='Received')
-    whd = Transactions.objects.filter(owner=request.user.email, trn_type='Withdrawal')
-    atb = Transactions.objects.filter(owner=request.user.email, trn_type='Airtime & Bumdle')
-    dp = Transactions.objects.filter(owner=request.user.email, trn_type='Deposit')
-    pb = Transactions.objects.filter(owner=request.user.email, trn_type='Pay Bill')
-    mct = Transactions.objects.filter(owner=request.user.email, trn_type='Merchant Payment')
-
-
-
-
-
-    transfers.append(tsf)
-    received.append(rcv)
-    withdrawal.append(whd)
-    bundle.append(atb)
-    deposit.append(dp)
-    merchant.append(mct)
-    paybill.append(pb)
-    """
-
+    # Retrieve transactions from sqlite and filter by type
     amt_sent = Transactions.objects.filter(owner=request.user.email, trn_type='Customer Transfer').aggregate(Sum('amount'))['amount__sum']
     amt_received = Transactions.objects.filter(owner=request.user.email, trn_type='Received').aggregate(Sum('amount'))['amount__sum']
     amt_withdrawn = Transactions.objects.filter(owner=request.user.email, trn_type='Withdrawal').aggregate(Sum('amount'))['amount__sum']
@@ -283,7 +250,7 @@ def ChartPageView(request):
 
 
 def StatPageView(request):
-
+    # Retrieve all user transactions
     transactions = Transactions.objects.filter(owner=request.user.email).order_by('trn_type')
 
     context = {}
@@ -293,6 +260,7 @@ def StatPageView(request):
 
 
 def UploadView(request):
+    #transaction data upload
     form = None
     if request.method == "POST":
         form = UploadForm(request.POST, request.FILES)
@@ -305,13 +273,11 @@ def UploadView(request):
         Filters transactions
         """
 
-
         # check for mpesa transactions
         if data[0].get('address') == 'MPESA':
             for item in data:
                 dict1 = {}
                 dict1['filter'] = item.get('body')
-
                 for i in dict1.values():
                     dct = {}
 
@@ -325,28 +291,28 @@ def UploadView(request):
                         dct['ref_id'] = re.sub("confirmed.*|Confirmed.*", "",i)
 
                     # Categorize transactions
-                    if re.search("sent to SAFARICOM", i):
+                    if i.find("sent to SAFARICOM" or "sent to Safaricom") >-1:
                         dct['trn_type'] = "Airtime & Bundle"
-                    elif re.search("Give", i):
+                    elif i.find("Give") > -1:
                         dct['trn_type'] = "Deposit"
-                    elif re.search("sent to", i):
-                        dct['trn_type'] = "Customer Transfer"
-                    elif re.search("transferred to", i):
-                        dct['trn_type'] = "Transfer"
-                    elif re.search("Withdraw", i):
-                        dct['trn_type'] = "Withdrawal"
-                    elif re.search("for account", i):
+                    elif i.find("sent to" and "for account") > -1:
                         dct['trn_type'] = "Pay Bill"
-                    elif re.search("paid to", i):
+                    elif i.find("have received") > -1:
+                        dct['trn_type'] = "Received"
+                    elif i.find("transferred to") > -1:
+                        dct['trn_type'] = "Transfer"
+                    elif i.find("Withdraw") > -1:
+                        dct['trn_type'] = "Withdraw"
+                    elif i.find("paid to") > -1:
                         dct['trn_type'] = "Merchant Payment"
-                    elif re.search("Insufficient funds", i):
+                    elif i.find("Insufficient funds") > -1:
                         continue
-                    elif re.search("insufficient funds", i):
+                    elif i.find("insufficient funds") > -1:
                         continue
-                    elif re.search("Failed.*", i):
+                    elif i.find("Failed.*") > -1:
                         continue
                     else:
-                        dct['trn_type'] = "Received"
+                        dct['trn_type'] = "Customer Transfer"
 
                     # Retrieve transaction amount
                     ns = re.sub(",", "", i)
@@ -393,7 +359,6 @@ def UploadView(request):
                     dct['created_at'] = datetime.datetime.today().strftime('%Y-%m-%d')
 
 
-                    # this is to filter transaction id for mpesa i'll replace with momo
                     # Retrieve unique ref id
                     if re.search("Failed", i):
                         continue
@@ -408,8 +373,8 @@ def UploadView(request):
                     elif i.find("transferred to") > -1:
                         dct['trn_type'] = "Customer Transfer"
                     elif i.find("withdrawn") > -1:
-                        dct['trn_type'] = "Withdraw"
-                    elif i.find("paid to") > -1:
+                        dct['trn_type'] = "Withdrawal"
+                    elif i.find("Your payment") > -1:
                         dct['trn_type'] = "Merchant Payment"
                     elif i.find("Insufficient funds") > -1:
                         continue
@@ -448,6 +413,7 @@ def UploadView(request):
                     c, new = Transactions.objects.get_or_create(**mydict)
                 except:
                     continue
+                
             print(result)
 
         else:
@@ -461,6 +427,7 @@ def UploadView(request):
 
 
 def DeleteUpload(request):
+        # delete all user data
         dels = Transactions.objects.filter(owner=request.user.email)
         dels.delete()
         return redirect('/dashboard/')

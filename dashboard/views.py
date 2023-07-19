@@ -329,7 +329,6 @@ def UploadView(request):
                         day = re.search(r"\d+/\d+/\d+", i)
                         day = day.group(0)
                         day = day.replace("/","-")
-                        date = datetime.datetime.strptime(day, '%d-%m-%y').date()
                         dct['trn_date'] = datetime.datetime.strptime(day, '%d-%m-%y').date()
                     except:
                         pass
@@ -339,11 +338,10 @@ def UploadView(request):
             #save entries
             for mydict in result:
                 try:
-                    c, new = Transactions.objects.get_or_create(**mydict)
+                    Transactions.objects.get_or_create(**mydict)
                 except:
                     continue
 
-            print(result)
 
 
         # check for momo transactions
@@ -410,14 +408,13 @@ def UploadView(request):
             #save entries
             for mydict in result:
                 try:
-                    c, new = Transactions.objects.get_or_create(**mydict)
+                    Transactions.objects.get_or_create(**mydict)
                 except:
                     continue
                 
-            print(result)
 
         else:
-            print('error')
+            pass
 
         messages.add_message(request, messages.SUCCESS, "Success!")
         return redirect('/dashboard/')
